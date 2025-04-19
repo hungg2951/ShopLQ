@@ -1,6 +1,8 @@
+'use client';
 import Link from "next/link";
 import React from "react";
-
+import Product1 from "./products/products1";
+import "../globals.css"
 interface Props {}
 
 const HomePage = (props: Props) => {
@@ -139,6 +141,9 @@ const HomePage = (props: Props) => {
             </Link>
           </div>
         </div>
+
+        {/* sản phẩm */}
+        <Product1/>
       </div>
     </div>
   );

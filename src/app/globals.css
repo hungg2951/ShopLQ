@@ -24,3 +24,14 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.swiper-button-prev:after, .swiper-button-next:after {
+  font-size: 16px !important;
+  color: white;
+}
+.infoAccount{
+  @apply leading-10
+}
+.infoAccount span{
+  @apply text-red-700 
+}
