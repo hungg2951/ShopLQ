@@ -7,7 +7,7 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-6">
         {/* Logo + Giới thiệu */}
         <div>
-          <p className="uppercase text-2xl font-bold text-yellow-500 mb-2">SHOP LIENQUAN</p>
+          <p className="uppercase text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text mb-2">SHOP LIENQUAN</p>
           <p className="text-gray-300">
             Shop Game Liên Quân Uy Tín - Chất Lượng Số 1 Việt Nam. Chuyên Cung
             Cấp Acc Giá Rẻ Nhất Thị Trường. Đội Ngũ Chăm Sóc Khách Hàng Hỗ Trợ

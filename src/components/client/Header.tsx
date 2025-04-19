@@ -38,11 +38,11 @@ const Header = () => {
   }, [isVisible]);
 
   return (
-    <header className="bg-gray-900 text-white shadow-md sticky top-0 z-50">
+    <header className="bg-gradient-to-r from-black via-[#0b0b2b] to-black text-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
         <Link
           href="/"
-          className="text-2xl font-bold text-yellow-400 hover:opacity-80"
+          className="text-2xl font-bold bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 text-transparent bg-clip-text hover:opacity-80"
         >
         SHOP LQ
         </Link>
@@ -53,13 +53,13 @@ const Header = () => {
         <div className="hidden md:flex space-x-4">
           <Link
             href="/dang-nhap"
-            className="bg-yellow-400 text-black px-4 py-1 rounded hover:bg-yellow-300"
+            className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-lg hover:scale-105 transition-transform duration-300 px-4 py-1 rounded hover:bg-yellow-300"
           >
             Đăng nhập
           </Link>
           <Link
             href="/dang-ky"
-            className="border border-yellow-400 px-4 py-1 rounded hover:bg-yellow-400 hover:text-black"
+            className="bg-gradient-to-l from-indigo-500 via-purple-500 to-pink-500 shadow-lg hover:scale-105 transition-transform duration-300 px-4 py-1 rounded hover:bg-yellow-300"
           >
             Đăng ký
           </Link>
