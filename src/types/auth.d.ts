@@ -6,4 +6,5 @@ export interface AuthType {
   role?: string;
   coin?: number;
   status?: boolean;
+  code?:number
 }

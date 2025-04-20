@@ -12,14 +12,12 @@ const RegisterPage: React.FC = () => {
     setLoading(true);
     try {
       const { data } = await authAPI.register(values);
-      console.log(data);
-      return;
       Swal.fire({
         icon: "success",
-        title: "Đăng ký thành công",
+        title: data.message,
         showConfirmButton: true,
       });
-      router.push("/verify");
+      router.push(`/verify?email=${encodeURIComponent(data.email)}`);
     } catch ({ response }: any) {
       Swal.fire({
         icon: "error",

@@ -9,6 +9,9 @@ export const authAPI = {
     return instance.post("register", payload);
   },
   me() {
-    return instance.get('/me'); 
+    return instance.get("/me");
+  },
+  verify(payload: { code: number; email: string }) {
+    return instance.post("/verify", payload);
   },
 };
