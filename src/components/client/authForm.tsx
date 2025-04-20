@@ -27,26 +27,26 @@ const AuthForm: React.FC<AuthFormProps> = ({
       </Title>
 
       <Form layout="vertical" onFinish={onSubmit} autoComplete="off">
+        <Form.Item
+          label="Tên người dùng"
+          name="username"
+          rules={[{ required: true, message: "Vui lòng nhập tên người dùng!" }]}
+        >
+          <Input />
+        </Form.Item>
+
         {!isLogin && (
           <Form.Item
-            label="Tên người dùng"
-            name="username"
-            rules={[{ required: true, message: "Vui lòng nhập tên người dùng!" }]}
+            label="Email"
+            name="email"
+            rules={[
+              { required: true, message: "Vui lòng nhập email!" },
+              { type: "email", message: "Email không hợp lệ!" },
+            ]}
           >
             <Input />
           </Form.Item>
         )}
-
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[
-            { required: true, message: "Vui lòng nhập email!" },
-            { type: "email", message: "Email không hợp lệ!" },
-          ]}
-        >
-          <Input />
-        </Form.Item>
 
         <Form.Item
           label="Mật khẩu"

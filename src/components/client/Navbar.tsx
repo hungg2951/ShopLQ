@@ -5,7 +5,7 @@ interface Props {}
 
 const Navbar = (props: Props) => {
   return (
-    <nav className="hidden md:flex space-x-6">
+    <nav className="hidden md:flex space-x-6 py-3">
       <Link href="/" className="bg-gradient-to-r from-white to-white bg-clip-text text-transparent hover:from-pink-500 hover:via-yellow-500 hover:to-red-500 transition-all duration-500">
         Trang chủ
       </Link>
