@@ -49,8 +49,6 @@ const Header = () => {
     router.push("/login");
   };
 
-  console.log(user, isLoggedIn);
-
   return (
     <header className="bg-gradient-to-r from-black via-[#0b0b2b] to-black text-white shadow-md sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 flex justify-between items-center">
