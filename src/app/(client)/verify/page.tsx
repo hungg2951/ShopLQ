@@ -3,6 +3,8 @@ import React, { useRef, useState } from "react";
 import { Input, Button, Typography, Space, message as antdMessage } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
 import { authAPI } from "@/api/auth";
+import ResendCodeButton from "@/components/client/reSendCode";
+import Swal from "sweetalert2";
 
 const { Title } = Typography;
 
@@ -71,9 +73,13 @@ const VerifyCodeAntd = () => {
       setLoading(true);
       //call api
       const { data } = await authAPI.verify({ email, code: Number(code) });
-        console.log(data);
-        
+      Swal.fire({
+        title: data?.message,
+        icon: "success",
+        draggable: true,
+      });
       setError("");
+      router.push("/dang-nhap");
     } catch (err: any) {
       const msg = err.response?.data?.message || "Xác thực thất bại.";
       setError(msg);
@@ -82,6 +88,20 @@ const VerifyCodeAntd = () => {
     }
   };
 
+  const onResend = async () => {
+    try {
+      if (!email) return setError("Email không hợp lệ.");
+      const { data } = await authAPI.reSendCodeVerify({ email });
+      Swal.fire({
+        title: data?.message,
+        icon: "success",
+        draggable: true,
+      });
+    } catch ({ response }: any) {
+      const msg = response?.data?.message;
+      setError(msg);
+    }
+  };
   return (
     <Space
       direction="vertical"
@@ -109,7 +129,7 @@ const VerifyCodeAntd = () => {
           />
         ))}
       </Space>
-
+      <ResendCodeButton onResend={onResend} />
       <Button
         type="primary"
         loading={loading}

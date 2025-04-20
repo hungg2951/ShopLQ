@@ -14,4 +14,7 @@ export const authAPI = {
   verify(payload: { code: number; email: string }) {
     return instance.post("/verify", payload);
   },
+  reSendCodeVerify(payload: { email: string }) {
+    return instance.post("/re-send-code-verify", payload);
+  },
 };
