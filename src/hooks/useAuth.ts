@@ -2,7 +2,6 @@
 
 import useSWR from 'swr';
 import { getToken, removeToken } from '@/utils/token';
-import instance from '@/api/instance';
 import { authAPI } from '@/api/auth';
 
 const fetchUser = async () => {

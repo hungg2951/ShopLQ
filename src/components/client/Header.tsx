@@ -89,7 +89,7 @@ const Header = () => {
                 <div className="flex justify-between items-center gap-2">
                   <div className="text-sm text-black">
                     <p>
-                      Số dư: <span className="text-red-800">${(user?.coin).toLocaleString("vi-vn")}</span>
+                      Số dư: <span className="text-red-800 text-lg">${(user?.coin).toLocaleString("vi-vn")}</span>
                     </p>
                   </div>
                 </div>
@@ -180,6 +180,11 @@ const Header = () => {
               </div>
             ) : (
               <div className="mt-5">
+                <div className="text-sm text-white mb-3">
+                    <p>
+                      Số dư: <span className="text-red-400 text-lg">${(user?.coin).toLocaleString("vi-vn")}</span>
+                    </p>
+                  </div>
                 <div className="flex justify-between items-center gap-2">
                   <figure className="w-10 h-10 cursor-pointer ">
                     <img className="rounded-[50%]" src={user?.avatar} alt="" />
