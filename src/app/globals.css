@@ -1,5 +1,5 @@
 @import "tailwindcss";
-
+@import 'react-toastify/dist/ReactToastify.css';
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -34,4 +34,10 @@ body {
 }
 .infoAccount span{
   @apply text-red-700 
+}
+
+/* Đẩy message sang phải */
+.ant-message {
+  right: 20px !important;
+  left: auto !important;
 }
