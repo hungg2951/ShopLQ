@@ -1,7 +1,7 @@
 "use client";
 
 import { fetcher } from "@/lib/fetcher";
-import { Table, Tag, Input, Button, Space, message, Switch } from "antd";
+import { Table, Tag, Input, Button, Space, Switch } from "antd";
 import type { ColumnsType, ColumnType } from "antd/es/table";
 import useSWR, { mutate } from "swr";
 import React, { useState, useRef } from "react";
@@ -248,7 +248,7 @@ const UsersTable = () => {
       <h2 className="text-center mb-10 text-xl font-bold">Dánh sách tài khoản SHOP LQ</h2>
       <Table
         loading={isLoading}
-        rowKey="id"
+        rowKey="_id"
         columns={columns}
         dataSource={users}
         pagination={{ pageSize: 10 }}

@@ -1,15 +1,17 @@
-import React from 'react'
+"use client";
+import { Button } from "antd";
+import { useRouter } from "next/navigation";
+import React from "react";
+import AccountTable from "./list/listAccount";
 
-interface Props {
-    
-}
+interface Props {}
 
 const ListAccounts = (props: Props) => {
-    return (
-        <div>
-            
-        </div>
-    )
-}
+  return (
+    <div>
+      <AccountTable />
+    </div>
+  );
+};
 
-export default ListAccounts
+export default ListAccounts;
