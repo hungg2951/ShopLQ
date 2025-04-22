@@ -244,7 +244,8 @@ const UsersTable = () => {
   ];
 
   return (
-    <div className="p-4">
+    <div>
+      <h2 className="text-center mb-10 text-xl font-bold">Dánh sách tài khoản SHOP LQ</h2>
       <Table
         loading={isLoading}
         rowKey="id"
