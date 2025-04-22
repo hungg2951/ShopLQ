@@ -229,7 +229,7 @@ const UsersTable = () => {
         ),
     },
     {
-      title: "Hành động",
+      title: "Chi tiết",
       key: "_id",
       width: 20,
       render: (_, record) => (
