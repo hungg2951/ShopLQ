@@ -103,13 +103,14 @@ export default function AccountTable() {
     filterIcon: () => (
       <SearchOutlined style={{ color: codeFilter ? "#1890ff" : undefined }} />
     ),
-    filterDropdownVisible,
-    onFilterDropdownVisibleChange: (visible) => {
-      setFilterDropdownVisible(visible);
-      if (visible) {
-        // Khi mở dropdown, đồng bộ input với filter hiện tại
-        setSearchText(codeFilter);
-      }
+    filterDropdownProps: {
+      open: filterDropdownVisible,
+      onOpenChange: (open) => {
+        setFilterDropdownVisible(open);
+        if (open) {
+          setSearchText(codeFilter);
+        }
+      },
     },
   });
 
@@ -143,7 +144,11 @@ export default function AccountTable() {
           <Button onClick={() => onRowClick(record)}>
             <IoIosInformationCircleOutline />
           </Button>
-          <Button>
+          <Button
+            onClick={() =>
+              router.push(`/admin/account/edit?code=${record.code}`)
+            }
+          >
             <FiEdit />
           </Button>
         </div>

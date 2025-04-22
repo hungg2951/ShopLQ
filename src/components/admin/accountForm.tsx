@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { Form, Input, InputNumber, Button, Select } from "antd";
-import axios from "axios";
 import UploadImageGroup from "./UploadImageGroup";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
@@ -62,29 +61,116 @@ const AccountForm: React.FC<AccountFormProps> = ({ defaultValues, isEdit }) => {
   // Khi có dữ liệu mặc định (update), fill vào form
   useEffect(() => {
     if (isEdit && defaultValues) {
-      form.setFieldsValue(defaultValues);
+      form.setFieldsValue({
+        ...defaultValues,
+        image: defaultValues.image
+          ? [
+              {
+                uid: "-1",
+                name: "image.png",
+                status: "done",
+                url: defaultValues.image,
+              },
+            ]
+          : [],
+        bagImages: (defaultValues.bagImages || []).map(
+          (url: string, i: number) => ({
+            uid: `${-i - 1}`,
+            name: `bag-${i}.png`,
+            status: "done",
+            url,
+          })
+        ),
+        skinImages: (defaultValues.skinImages || []).map(
+          (url: string, i: number) => ({
+            uid: `${-i - 1}`,
+            name: `skin-${i}.png`,
+            status: "done",
+            url,
+          })
+        ),
+        champImages: (defaultValues.champImages || []).map(
+          (url: string, i: number) => ({
+            uid: `${-i - 1}`,
+            name: `champ-${i}.png`,
+            status: "done",
+            url,
+          })
+        ),
+        runeImages: (defaultValues.runeImages || []).map(
+          (url: string, i: number) => ({
+            uid: `${-i - 1}`,
+            name: `rune-${i}.png`,
+            status: "done",
+            url,
+          })
+        ),
+      });
     }
   }, [isEdit, defaultValues, form]);
 
   const onFinish = async (values: any) => {
     setloading(true);
     try {
-      if (!values.image || !values.image[0]?.originFileObj) {
-        console.log(values);
-        setloading(false);
-        return Swal.fire({
-          icon: "error",
-          title: "Lỗi upload ảnh",
-          showConfirmButton: true,
-        });
+      // Xử lý ảnh đại diện (image)
+      let image: string | undefined = defaultValues?.image;
+      if (values.image && values.image.length > 0) {
+        // Nếu có ảnh mới thì upload, nếu không (chỉ là ảnh hiện có) thì giữ nguyên
+        if (values.image[0].originFileObj) {
+          image = await uploadToCloudinary(values.image[0].originFileObj);
+        } else if (values.image[0].status === "removed") {
+          image = undefined; // Xóa ảnh nếu người dùng xóa
+        }
       }
-      // Upload ảnh
-      const image = await uploadToCloudinary(values.image[0].originFileObj);
-      const bagImages = await uploadImageArray(values.bagImages || []);
-      const skinImages = await uploadImageArray(values.skinImages || []);
-      const champImages = await uploadImageArray(values.champImages || []);
-      const runeImages = await uploadImageArray(values.runeImages || []);
 
+      // Hàm xử lý mảng ảnh
+      const handleImageArray = async (
+        currentImages: any[],
+        originalImages: string[] = []
+      ): Promise<string[]> => {
+        // Nếu không có ảnh nào được chọn, trả về mảng rỗng
+        if (!currentImages || currentImages.length === 0) return [];
+
+        // Tách các ảnh thành 2 loại: ảnh mới cần upload và ảnh hiện có
+        const newImages = currentImages
+          .filter((item) => item.originFileObj)
+          .map((item) => item.originFileObj);
+
+        const existingImages = currentImages
+          .filter(
+            (item) =>
+              item.url && !item.originFileObj && item.status !== "removed"
+          )
+          .map((item) => item.url);
+
+        // Upload các ảnh mới
+        const uploadedNewImages = await Promise.all(
+          newImages.map(async (file) => {
+            return await uploadToCloudinary(file);
+          })
+        );
+
+        // Kết hợp ảnh hiện có và ảnh mới upload
+        return [...existingImages, ...uploadedNewImages];
+      };
+
+      // Xử lý từng loại ảnh
+      const bagImages = await handleImageArray(
+        values.bagImages || [],
+        defaultValues?.bagImages
+      );
+      const skinImages = await handleImageArray(
+        values.skinImages || [],
+        defaultValues?.skinImages
+      );
+      const champImages = await handleImageArray(
+        values.champImages || [],
+        defaultValues?.champImages
+      );
+      const runeImages = await handleImageArray(
+        values.runeImages || [],
+        defaultValues?.runeImages
+      );
       // Payload gửi lên backend
       const payload = {
         ...values,
@@ -100,34 +186,53 @@ const AccountForm: React.FC<AccountFormProps> = ({ defaultValues, isEdit }) => {
       };
 
       if (isEdit) {
-        setloading(false);
-        // Nếu là update thì gọi API PATCH
-        console.log(payload);
+        await accountAPI
+          .updateAccount({...payload,idAccount:defaultValues.idAccount,idInfoAcc:defaultValues.idInfoAcc})
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Chỉnh sửa thành công!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            // if (response && mounted) {
+            //   router.push("/admin/account"); // Chuyển hướng sau khi thành công
+            // }
+          })
+          .catch(({ response }) => {
+            Swal.fire({
+              icon: "error",
+              title: response?.data.mesage,
+              showConfirmButton: true,
+            });
+          })
+          .finally(() => setloading(false));
       } else {
         // Nếu là create thì gọi API POST
-        await accountAPI.createAccount(payload)
-        .then(() => {
-          Swal.fire({
-            icon: "success",
-            title: "Tạo tài khoản thành công!",
-            showConfirmButton: false,
-            timer: 1500,
+        await accountAPI
+          .createAccount(payload)
+          .then(() => {
+            Swal.fire({
+              icon: "success",
+              title: "Tạo tài khoản thành công!",
+              showConfirmButton: false,
+              timer: 1500,
+            });
+            form.resetFields();
+            // if (response && mounted) {
+            //   router.push("/admin/account"); // Chuyển hướng sau khi thành công
+            // }
           })
-          form.resetFields();
-          // if (response && mounted) {
-          //   router.push("/admin/account"); // Chuyển hướng sau khi thành công
-          // }
-        })
-        .catch(({response}) => {
-          Swal.fire({
-            icon: "error",
-            title: response?.data.mesage,
-            showConfirmButton: true,
-          });
-        })
-        .finally(() => setloading(false));
+          .catch(({ response }) => {
+            Swal.fire({
+              icon: "error",
+              title: response?.data.mesage,
+              showConfirmButton: true,
+            });
+          })
+          .finally(() => setloading(false));
       }
-    } catch (error:any) {
+    } catch (error: any) {
       setloading(false);
       console.error(error);
       Swal.fire({
@@ -146,14 +251,14 @@ const AccountForm: React.FC<AccountFormProps> = ({ defaultValues, isEdit }) => {
           label="Tên đăng nhập"
           rules={[{ required: true, message: "Vui lòng không để trống!" }]}
         >
-          <Input/>
+          <Input />
         </Form.Item>
         <Form.Item
           name="plainPassword"
           label="Mật khẩu"
           rules={[{ required: true, message: "Vui lòng không để trống!" }]}
         >
-          <Input type="password"/>
+          <Input type="password" />
         </Form.Item>
         <Form.Item
           name="type"
@@ -240,7 +345,7 @@ const AccountForm: React.FC<AccountFormProps> = ({ defaultValues, isEdit }) => {
           />
         </Form.Item>
         <Form.Item name="matches" label="Số trận">
-        <InputNumber
+          <InputNumber
             style={{ width: "100%" }}
             min={0}
             formatter={(value: any) =>

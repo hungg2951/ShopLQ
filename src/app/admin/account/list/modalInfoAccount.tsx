@@ -24,8 +24,10 @@ export default function AccountModal({ visible, onCancel, account }: AccountModa
         column={1}
         bordered
         size="small"
-        labelStyle={{ width: 150, fontWeight: 500 }}
-        contentStyle={{}}
+        styles={{
+          label: { width: 150, fontWeight: 500 }, // Thay thế labelStyle
+          content: {}, // Thay thế contentStyle
+        }}
       >
         <Descriptions.Item label="Mã">{account.code}</Descriptions.Item>
         <Descriptions.Item label="Game">{account.game || 'Liên Quân'}</Descriptions.Item>
@@ -34,7 +36,7 @@ export default function AccountModal({ visible, onCancel, account }: AccountModa
           {account.price.toLocaleString()} đ
         </Descriptions.Item>
         <Descriptions.Item label="Giảm giá">
-          {account.discount ?? 0}%  
+          {account.discount ?? 0}%
         </Descriptions.Item>
 
         <Descriptions.Item label="Trạng thái">
