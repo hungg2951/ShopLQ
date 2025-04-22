@@ -1,28 +1,38 @@
 "use client";
 
 import { fetcher } from "@/lib/fetcher";
-import { UsersType } from "@/types/auth";
 import { Table, Tag, Input, Button, Space, message, Switch } from "antd";
 import type { ColumnsType, ColumnType } from "antd/es/table";
 import useSWR, { mutate } from "swr";
-import { useState, useRef } from "react";
-import {  SearchOutlined } from "@ant-design/icons";
+import React, { useState, useRef } from "react";
+import { SearchOutlined } from "@ant-design/icons";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import { IoIosInformationCircleOutline } from "react-icons/io";
 import { userAPI } from "@/api/user";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
+import UserInfoModal from "./modalInfoUser";
 
-type DataIndex = keyof UsersType;
+type DataIndex = keyof TUsersType;
 
 const UsersTable = () => {
-  const { data: users, isLoading } = useSWR<UsersType[]>(
+  const {
+    data: users,
+    isLoading,
+    error,
+  } = useSWR<TUsersType[]>(
     process.env.NEXT_PUBLIC_API_BASE_URL + "/users",
     fetcher
   );
 
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
+  const [open, setOpen] = useState<boolean>(false);
+  const [user, setUser] = useState<TUsersType>();
+
   const searchInput = useRef(null);
+  const router = useRouter();
 
   const handleSearch = (
     selectedKeys: string[],
@@ -41,18 +51,41 @@ const UsersTable = () => {
 
   const toggleUpdateUser = async (values: TUserUpdate) => {
     try {
-      await userAPI.updateUser(values);
-      await mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users`);
-      toast.success("Chỉnh sửa thành công")
+      Swal.fire({
+        title: "Bạn có chắc muốn lưu chỉnh sửa?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Lưu chỉnh sửa!",
+        cancelButtonText: "Hủy",
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            title: "Thành công!",
+            text: "Lưu chỉnh sửa thành công.",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+          await userAPI.updateUser(values);
+          mutate(`${process.env.NEXT_PUBLIC_API_BASE_URL}/users`);
+        }
+      });
     } catch (error) {
       console.error(error);
       toast.error("Có lỗi khi cập nhật trạng thái");
     }
   };
 
+  const openModalInfoUser = (value: TUsersType) => {
+    setUser(value);
+    setOpen(true);
+  };
+
   const getColumnSearchProps = (
     dataIndex: DataIndex
-  ): ColumnType<UsersType> => ({
+  ): ColumnType<TUsersType> => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
@@ -106,10 +139,20 @@ const UsersTable = () => {
         .includes((value as string).toLowerCase()),
   });
 
+  React.useEffect(() => {
+    if (error) {
+      Swal.fire({
+        title: error?.response.data.message,
+        icon: "error",
+        draggable: true,
+      });
+    }
+  }, [error]);
+
   if (isLoading) return <div>Loading...</div>;
   if (!users) return null;
 
-  const columns: ColumnsType<UsersType> = [
+  const columns: ColumnsType<TUsersType> = [
     {
       title: "Tên tài khoản",
       dataIndex: "username",
@@ -190,7 +233,10 @@ const UsersTable = () => {
       key: "_id",
       width: 20,
       render: (_, record) => (
-        <Button className="flex justify-end w-fit">
+        <Button
+          className="flex justify-end w-fit"
+          onClick={() => openModalInfoUser(record)}
+        >
           <IoIosInformationCircleOutline />
         </Button>
       ),
@@ -205,6 +251,14 @@ const UsersTable = () => {
         columns={columns}
         dataSource={users}
         pagination={{ pageSize: 10 }}
+      />
+      <UserInfoModal
+        visible={open}
+        onClose={() => {
+          setOpen(false);
+          setUser(undefined);
+        }}
+        user={user}
       />
     </div>
   );
