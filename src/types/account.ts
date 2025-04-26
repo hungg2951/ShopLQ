@@ -1,6 +1,6 @@
 interface TAccount {
+  _id?:string,
   code: string;
-  title: string;
   description?: string;
   game?: string;
   price: number;
