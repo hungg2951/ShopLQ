@@ -45,6 +45,7 @@ export default function Product1() {
                 skins={item.skins}
                 runes={item.runes}
                 image={item.image}
+                isSold = {item.isSold}
               />
             </Link>
           </SwiperSlide>

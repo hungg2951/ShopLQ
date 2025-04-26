@@ -16,9 +16,9 @@ const ProductDetail = () => {
 
   const { id } = useParams();
 
-  const { user, isLoggedIn,mutateUser } = useAuth();
+  const { user, isLoggedIn, mutateUser } = useAuth();
 
-  const router =useRouter()
+  const router = useRouter();
 
   const clickButton = (title: string, payload: string[]) => {
     setTitle(title);
@@ -30,8 +30,6 @@ const ProductDetail = () => {
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/account/${id}`,
     fetcher
   );
-
-  
 
   if (isLoading) return <div>loading...</div>;
   if (!data) return;
@@ -62,15 +60,15 @@ const ProductDetail = () => {
         orderAPI
           .create({ idAcc: data._id! })
           .then(() => {
-            mutateUser()
+            mutateUser();
             Swal.fire({
               title: "Giao dịch thành công!",
               text: "Vui lòng kiểm tra email để lấy thông tin account.",
               icon: "success",
             });
-            router.push("/lich-su-mua")
+            router.push("/lich-su-mua");
           })
-          .catch(({response}) => {
+          .catch(({ response }) => {
             Swal.fire({
               title: "Giao dịch thất bại!",
               text: response?.data?.message,
@@ -159,25 +157,31 @@ const ProductDetail = () => {
             Xem ngọc
           </button>
         </div>
-        <div className="text-3xl font-bold text-red-700">
-          {data.price.toLocaleString()}₫{" "}
-          <span className="line-through text-gray-500 text-base ml-2">
-            {data.discount &&
-              Math.ceil(
-                data.price / (1 - data.discount / 100)
-              ).toLocaleString()}
-          </span>{" "}
-          <span className="text-sm bg-red-700 text-white px-2 py-0.5 rounded">
-            - {data.discount}%
-          </span>
-        </div>
+        {data.isSold ? (
+          <div className="text-red-500 font-bold text-2xl italic">Đã bán</div>
+        ) : (
+          <div>
+            <div className="text-3xl font-bold text-red-700">
+              {data.price.toLocaleString()}₫{" "}
+              <span className="line-through text-gray-500 text-base ml-2">
+                {data.discount &&
+                  Math.ceil(
+                    data.price / (1 - data.discount / 100)
+                  ).toLocaleString()}
+              </span>{" "}
+              <span className="text-sm bg-red-700 text-white px-2 py-0.5 rounded">
+                - {data.discount}%
+              </span>
+            </div>
 
-        <button
-          onClick={() => payment()}
-          className="bg-[#101828] text-white w-full py-4 rounded font-semibold hover:bg-red-700 cursor-pointer"
-        >
-          MUA & NHẬN ACC (Giao dịch tự động)
-        </button>
+            <button
+              onClick={() => payment()}
+              className="bg-[#101828] text-white w-full py-4 rounded font-semibold hover:bg-red-700 cursor-pointer"
+            >
+              MUA & NHẬN ACC (Giao dịch tự động)
+            </button>
+          </div>
+        )}
 
         <ul className="text-sm space-y-1 text-gray-700">
           <li>✔️ Tài khoản đăng nhập Garena, chưa liên kết Facebook</li>

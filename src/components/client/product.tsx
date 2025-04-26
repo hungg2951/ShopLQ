@@ -8,6 +8,7 @@ export default function AccCard({
   skins,
   runes,
   image,
+  isSold,
 }: TAccount) {
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 p-2 relative group transition-all duration-300">
@@ -47,14 +48,18 @@ export default function AccCard({
           Tướng: {champions} • Skin: {skins} • Ngọc III: {runes}
         </p>
 
-        <div className="text-red-600 font-semibold text-lg">
-          {price.toLocaleString("vi-VN")}đ
-          <span className="text-gray-400 line-through text-sm ml-2">
-            {discount &&
-              Math.ceil(price / (1 - discount / 100)).toLocaleString()}
-            đ
-          </span>
-        </div>
+        {!isSold ? (
+          <div className="text-red-600 font-semibold text-lg">
+            {price.toLocaleString("vi-VN")}đ
+            <span className="text-gray-400 line-through text-sm ml-2">
+              {discount &&
+                Math.ceil(price / (1 - discount / 100)).toLocaleString()}
+              đ
+            </span>
+          </div>
+        ) : (
+          <div className="text-red-500 font-bold italic">Đã bán</div>
+        )}
 
         <button className="bg-black text-white px-4 py-1 text-sm rounded hover:bg-gray-800">
           XEM CHI TIẾT
