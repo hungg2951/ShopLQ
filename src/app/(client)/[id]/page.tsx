@@ -7,7 +7,7 @@ import useSWR from "swr";
 import { useParams, useRouter } from "next/navigation";
 import { useAuth } from "@/hooks/useAuth";
 import Swal from "sweetalert2";
-import { orderAPI } from "@/api/order";
+import { orderAPI } from "@/service/order";
 
 const ProductDetail = () => {
   const [open, setOpen] = React.useState(false);

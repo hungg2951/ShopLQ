@@ -8,7 +8,7 @@ import React, { useState, useRef } from "react";
 import { SearchOutlined } from "@ant-design/icons";
 import type { FilterConfirmProps } from "antd/es/table/interface";
 import { IoIosInformationCircleOutline } from "react-icons/io";
-import { userAPI } from "@/api/user";
+import { userAPI } from "@/service/user";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";

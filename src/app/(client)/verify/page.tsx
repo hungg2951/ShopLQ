@@ -2,7 +2,7 @@
 import React, { useRef, useState } from "react";
 import { Input, Button, Typography, Space, message as antdMessage } from "antd";
 import { useRouter, useSearchParams } from "next/navigation";
-import { authAPI } from "@/api/auth";
+import { authAPI } from "@/service/auth";
 import ResendCodeButton from "@/components/client/reSendCode";
 import Swal from "sweetalert2";
 

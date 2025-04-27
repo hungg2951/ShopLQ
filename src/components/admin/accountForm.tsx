@@ -6,7 +6,7 @@ import UploadImageGroup from "./UploadImageGroup";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import { dataRanks, typeAccount } from "@/utils/dataAccount";
-import { accountAPI } from "@/api/account";
+import { accountAPI } from "@/service/account";
 
 interface AccountFormProps {
   defaultValues?: any; // dữ liệu cũ (nếu có)

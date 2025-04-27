@@ -2,7 +2,7 @@
 
 import useSWR from 'swr';
 import { getToken, removeToken } from '@/utils/token';
-import { authAPI } from '@/api/auth';
+import { authAPI } from '@/service/auth';
 
 const fetchUser = async () => {
   const token = getToken();

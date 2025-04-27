@@ -1,5 +1,5 @@
 "use client";
-import { authAPI } from "@/api/auth";
+import { authAPI } from "@/service/auth";
 import AuthForm from "@/components/client/authForm";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";

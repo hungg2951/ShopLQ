@@ -1,5 +1,5 @@
 "use client";
-import { authAPI } from "@/api/auth";
+import { authAPI } from "@/service/auth";
 import AuthForm from "@/components/client/authForm";
 import { useAuth } from "@/hooks/useAuth";
 import { AuthType } from "@/types/auth";
